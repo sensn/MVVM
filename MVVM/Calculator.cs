@@ -9,7 +9,7 @@ namespace MVVM
 {
     //onewaybinding
     //onetimebinding
-    //twoqaybinding
+    //twowaybinding
    public class Calculator
     {
         private int value1 = 0;

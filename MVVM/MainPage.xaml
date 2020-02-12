@@ -7,11 +7,48 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Page.DataContext>
+    <!--<Page.DataContext>
         <local:MainViewModel/>
-    </Page.DataContext>
-    
-    <Grid >
+    </Page.DataContext>-->
+
+    <Grid x:Name="thegrid" Margin="0,0,0,0">
+        <NavigationView x:Name="nvTopLevelNav"
+                Loaded="nvTopLevelNav_Loaded"
+                Margin="0,0,0,0"
+               
+                SelectionChanged="nvTopLevelNav_SelectionChanged"
+                ItemInvoked="nvTopLevelNav_ItemInvoked"
+                IsTabStop="False"
+                      
+                PaneDisplayMode="Auto"
+                IsBackButtonVisible="Collapsed"
+
+                Header="Menu">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Icon="Home" Tag="Home_Page">
+                    <TextBlock Tag="Nav_Home">Home</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem Icon="Shop" Tag="Shop_Page">
+                    <TextBlock Tag="Nav_Shop">Shop</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem Tag="Cart_Page">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph=""/>
+                    </NavigationViewItem.Icon>
+                    <TextBlock Tag="Nav_ShopCart">Shopping Cart</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem Icon="Message" Tag="Message_Page">
+                    <TextBlock Tag="Nav_Message">Message</TextBlock>
+                </NavigationViewItem>
+                <NavigationViewItem Icon="Print" Tag="Print_Page">
+                    <TextBlock Tag="Nav_Print">Print</TextBlock>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <Frame x:Name="contentFrame"></Frame>
+        </NavigationView>
+
+    </Grid>
+<!--<Grid >
         <StackPanel Name="Stackpanel" Orientation="Vertical">
             <TextBox Text="{Binding MyItems[0],Mode=TwoWay}"/>
             <TextBox Text="{Binding MyItems[2]}"/>
@@ -58,5 +95,5 @@
                     Background="#33000000"
                 />
         </StackPanel>
-    </Grid>
+    </Grid>-->
 </Page>

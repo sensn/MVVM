@@ -11,7 +11,8 @@ namespace MVVM
 {
     public class MainViewModel : MainViewModelBase
     {
-        private Calculator calculator_ = null;
+       // private static  MyLogic myLogic_ = null;
+        private static  Calculator calculator_ = null;
         private int result_ = 0;
         private int value1_ = 14;
         private int value2_ = 0;
@@ -24,24 +25,57 @@ namespace MVVM
         private ObservableCollection<string> _myItems = new ObservableCollection<string>(new[] { "test11", "test2", "test3" });
         private ObservableCollection<bool> _myItemsbool = new ObservableCollection<bool>(new[] { true, false, true });
 
-        public ObservableCollection<bool> MyItemsbool { get => _myItemsbool; set => _myItemsbool = value; }
+       public MainViewModel()
+        {
+            calculator_ = new Calculator(Value1, Value2);
+        }
+        public ObservableCollection<bool> MyItemsbool { get { return _myItemsbool; } 
+            set 
+            {
+             
+                    _myItemsbool = value; 
+            }
+        }
         public ObservableCollection<string> MyItems
         {
             get { return _myItems; }
-            set { _myItems = value; }
+            set { _myItems = value; ; }
         }
 
         public void fillItems()
         {
-         
-            for (int i = 0; i < 10; i++)
-            {
-                MyItemsbool.Add(true);
-                MyItemsbool[i] = true;
-            }
+            for (int i = 0; i < 5; i++)
+                for (int j = 0; j < 16; j++)
+                {
+                    {
+                        MyItemsbool.Add(false);
+                        MyItemsbool[(j) + (i * 16)] = false;
+                    }
+                }
+
+            
+
+            //            for (int i = 0; i < 10; i++)
+            //{
+            //    MyItemsbool.Add(false);
+            //    MyItemsbool[i] = false;
+            //}
 
         }
-
+        public void printItems()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Debug.WriteLine(MyItemsbool[i]);
+            }
+            for (int i = 0; i < 10; i++)
+            {
+              
+                 //   MyItemsbool[i] = false;
+                
+              
+            } 
+        }
         public string SomeString
         {
             get
@@ -132,7 +166,7 @@ namespace MVVM
             get
             {
                 
-                return new DelegateCommand(FindResult);
+                return new DelegateCommand(printItems);
             }
         }
 
@@ -140,7 +174,7 @@ namespace MVVM
 
         public void FindResult()
         {
-            calculator_ = new Calculator(Value1, Value2);
+           // calculator_ = new Calculator(Value1, Value2);
             Debug.WriteLine("HOHO");
             if (IsAddChecked)
             {
