@@ -31,6 +31,17 @@ namespace MVVM
             set { _myItems = value; }
         }
 
+        public void fillItems()
+        {
+         
+            for (int i = 0; i < 10; i++)
+            {
+                MyItemsbool.Add(true);
+                MyItemsbool[i] = true;
+            }
+
+        }
+
         public string SomeString
         {
             get

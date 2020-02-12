@@ -35,6 +35,7 @@ namespace MVVM
           //  VM = new MainViewModel();
             this.InitializeComponent();
             this.TheMainViewModel = new MainViewModel();
+            this.TheMainViewModel.fillItems();
             Binding myBinding = new Binding();
             myBinding.Source = TheMainViewModel;
             myBinding.Path = new PropertyPath("SomeString");
@@ -43,9 +44,10 @@ namespace MVVM
             BindingOperations.SetBinding(txtText, TextBox.TextProperty, myBinding);
 
 
+          
 
             ToggleButton b = new ToggleButton();
-            b.Name = "thebutton";
+           // b.Name = "thebutton";
             Stackpanel.Children.Add(b);
             b.Content = "Button";
 
