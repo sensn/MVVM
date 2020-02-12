@@ -12,6 +12,14 @@
     </Page.DataContext>
     
     <Grid >
+        <StackPanel Name="Stackpanel" Orientation="Vertical">
+            <TextBox Text="{Binding MyItems[0],Mode=TwoWay}"/>
+            <TextBox Text="{Binding MyItems[2]}"/>
+            <TextBlock Text="{Binding MyItems[0]}"/>
+            <TextBlock Text="{Binding MyItems[1]}"/>
+            <TextBox Name="txtText"></TextBox>
+        </StackPanel>
+        
         <StackPanel  Orientation="Vertical"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center">

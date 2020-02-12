@@ -22,11 +22,11 @@ namespace MVVM
     /// </summary>
     public sealed partial class MainPage : Page
     { //viewModel property
-        private MainViewModel vM;
+      // private MainViewModel vM;
 
-        //public MainViewModel VM
-        //{
-        //    get => vM; set => vM = value;
+
+        public MainViewModel TheMainViewModel { get; set; }
+      
         //}
 
         //ctor
@@ -34,6 +34,29 @@ namespace MVVM
         {
           //  VM = new MainViewModel();
             this.InitializeComponent();
+            this.TheMainViewModel = new MainViewModel();
+            Binding myBinding = new Binding();
+            myBinding.Source = TheMainViewModel;
+            myBinding.Path = new PropertyPath("SomeString");
+            myBinding.Mode = BindingMode.TwoWay;
+            myBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            BindingOperations.SetBinding(txtText, TextBox.TextProperty, myBinding);
+
+
+
+            ToggleButton b = new ToggleButton();
+            b.Name = "thebutton";
+            Stackpanel.Children.Add(b);
+            b.Content = "Button";
+
+            Binding myBinding1 = new Binding();
+            myBinding1.Source = TheMainViewModel;
+            myBinding1.Path = new PropertyPath("MyItemsbool[0]");
+            myBinding1.Mode = BindingMode.TwoWay;
+            myBinding1.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            BindingOperations.SetBinding(b, ToggleButton.IsCheckedProperty, myBinding1);
+            //BindingOperations.SetBinding(txtText, TextBox.TextProperty, myBinding1);
+
         }
 
 

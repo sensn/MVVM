@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using System.Windows.Input;
 
 namespace MVVM
 {
-    class MainViewModel : MainViewModelBase
+    public class MainViewModel : MainViewModelBase
     {
         private Calculator calculator_ = null;
         private int result_ = 0;
@@ -19,6 +20,34 @@ namespace MVVM
         private bool isMulChecked_ = false;
         private bool isDivChecked_ = false;
         private bool isAnyRadioBtnCheck_ = false;
+        private string someString_="HUHU";
+        private ObservableCollection<string> _myItems = new ObservableCollection<string>(new[] { "test11", "test2", "test3" });
+        private ObservableCollection<bool> _myItemsbool = new ObservableCollection<bool>(new[] { true, false, true });
+
+        public ObservableCollection<bool> MyItemsbool { get => _myItemsbool; set => _myItemsbool = value; }
+        public ObservableCollection<string> MyItems
+        {
+            get { return _myItems; }
+            set { _myItems = value; }
+        }
+
+        public string SomeString
+        {
+            get
+            {
+                return someString_;
+            }
+            set
+            {
+                someString_ = value;
+                OnPropertyChanged("SomeString");
+            }
+        }
+
+
+
+
+        // CALC
 
         public bool IsAnyRadioBtnCheck { get => isAnyRadioBtnCheck_; set { isAnyRadioBtnCheck_ = value; OnPropertyChanged("IsAnyRadioBtnCheck");}}
 
@@ -96,12 +125,15 @@ namespace MVVM
             }
         }
 
+      
+
         public void FindResult()
         {
             calculator_ = new Calculator(Value1, Value2);
             Debug.WriteLine("HOHO");
             if (IsAddChecked)
             {
+                MyItems[1]= "test5";
                 Result = calculator_.Add();
             }
             else if (IsSubChecked)
