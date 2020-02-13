@@ -56,6 +56,7 @@ namespace MVVM
         //  List<int> vec_bs;
         public MainViewModel TheMainViewModel1 { get; set; }
         Binding[] Toggle_Binding = new Binding[5*16];
+        Binding[] Mute_Toggle_Binding = new Binding[5];
         public Room()
         {
             TheMainViewModel1 = new MainViewModel();
@@ -132,8 +133,8 @@ namespace MVVM
                         //bu[i, j].Background = new SolidColorBrush(Windows.UI.Colors.DarkBlue);
                         // bu[i, j].Content = "T";
                         //   bu[i, j].Click += HandleButtonClick;
-                        bu[i, j].Checked += HandleToggleButtonChecked;
-                        bu[i, j].Unchecked += HandleToggleButtonUnChecked;
+                       // bu[i, j].Checked += HandleToggleButtonChecked;
+                       // bu[i, j].Unchecked += HandleToggleButtonUnChecked;
                         // bu[i, j].Tag = i;
                         //bool isOver = bu[i, j].IsPointerOver;
 
@@ -162,12 +163,19 @@ namespace MVVM
                 mute_bu[i] = new MyToggle();
                 mute_bu[i].Checked += HandleMuteButtonChecked;
                 mute_bu[i].Unchecked += HandleMuteButtonUnChecked;
+               
                 mute_bu[i].HorizontalAlignment = HorizontalAlignment.Stretch;
                 mute_bu[i].VerticalAlignment = VerticalAlignment.Stretch;
                 mute_bu[i].Tag = i;
-                //mute_bu[i].IsThreeState = false;
-                // b.IsThreeState = true;
                 uniformGrid3.Children.Add(mute_bu[i]);
+                //BINDINGs
+                Mute_Toggle_Binding[i] = new Binding();
+                Mute_Toggle_Binding[i].Source = this.TheMainViewModel1;
+                string ppath = "MyItems_Mute_bool["+i+"]";
+                Mute_Toggle_Binding[i].Path = new PropertyPath(ppath);
+                Mute_Toggle_Binding[i].Mode = BindingMode.TwoWay;
+                Mute_Toggle_Binding[i].UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                BindingOperations.SetBinding(mute_bu[i], ToggleButton.IsCheckedProperty, Mute_Toggle_Binding[i]);
             }
 
             for (int i = 0; i < 3; i++)
@@ -293,6 +301,7 @@ namespace MVVM
             //Debug.WriteLine(client+ " " + sl.Value);
             ////  Debug.WriteLine(client);
             if (client == 0)
+               // BlankPage1.TheLogic.bpm_value((int)sl.Value);
                 BlankPage1.bpm_value((int)sl.Value);
             if (client == 1)
                 BlankPage1.vol_value(channel, (int)sl.Value);
@@ -307,8 +316,8 @@ namespace MVVM
             toggle.state = 0;
             // toggle.Background = new SolidColorBrush(Windows.UI.Colors.Green);
             //throw new NotImplementedException();
-            Debug.WriteLine("isChecked:" + toggle.IsChecked);
-            Debug.WriteLine("State:" + toggle.state);
+           // Debug.WriteLine("isChecked:" + toggle.IsChecked);
+          //  Debug.WriteLine("State:" + toggle.state);
 
             var client = clientDict[sender as MyToggle];
             Debug.WriteLine(client.Item1 + " " + client.Item2);

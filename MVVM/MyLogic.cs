@@ -12,9 +12,17 @@ namespace MVVM
     public class MyLogic
     {
         public Worker playsequence;
-        MainViewModel[] TheModels = new MainViewModel[10];
-        public MyLogic()
+        public MainViewModel[] TheModels = new MainViewModel[10];
+        public  MainViewModel TheMainModel = new MainViewModel();
+
+        MyMidiDeviceWatcher inputDeviceWatcher;
+        MyMidiDeviceWatcher outputDeviceWatcher;
+
+       // public static MidiInPort midiInPort;
+        public  IMidiOutPort midiOutPort;
+        public  MyLogic()
         {
+          
             Debug.WriteLine("Servas Wöd, I brauch a göd! CREATE TASK");
 
             playsequence = new Worker();
@@ -29,6 +37,7 @@ namespace MVVM
                 Task.CurrentId, obj,
                 Thread.CurrentThread.ManagedThreadId);
                 playsequence.mythread1();
+                //mythread1();
             };
 
 
@@ -36,6 +45,16 @@ namespace MVVM
             t1.Start();
             Console.WriteLine("t1 has been launched. (Main Thread={0})",
                               Thread.CurrentThread.ManagedThreadId);
+            
+        }
+        public void mythread1()
+        {
+
+        }
+
+        public void setMidiout(IMidiOutPort themidiout)
+        {
+            midiOutPort = themidiout;
         }
         public void setTheModels(MainViewModel themodel, int num)
         {
@@ -43,6 +62,15 @@ namespace MVVM
 
             Debug.WriteLine("THEMODELS" + TheModels[0].MyItemsbool[0]);
         }
+        public void setTheMainModel(MainViewModel themainmodel)
+        {
+            TheMainModel = themainmodel;
+
+          //  Debug.WriteLine("THEMODELS" + TheModels[0].MyItemsbool[0]);
+        }
+
+    
+        //public void sendMidiMessage1(int i, int j, int index)
         public void sendMidiMessage1(int i, int j, int index)
         {
 
@@ -50,14 +78,14 @@ namespace MVVM
             {
                 // ALL NOTES OF
                 IMidiMessage midiMessageToSend = new MidiControlChangeMessage((byte)(x), (byte)123, (byte)0);
-                //midiOutPort.SendMessage(midiMessageToSend);
+                midiOutPort.SendMessage(midiMessageToSend);
             }
 
             for (int x = 0; x < 10; x++)
             {
                 for (int y = 0; y < 5; y++)
                 {
-                    if (TheModels[x].MyItemsbool[index+(y*16)] == true )
+                    if (TheModels[x].MyItemsbool[index+(y*16)] == true && TheModels[x].MyItems_Mute_bool[y])
                     //if (room[x].thepattern.vec_bs1[y, index] == 1 && room[x].thepattern.vec_m_bs1[y] == 1)
                     {
                         byte channel = (byte)x;
@@ -65,13 +93,20 @@ namespace MVVM
                         byte velocity = 100;
 
                         IMidiMessage midiMessageToSend = new MidiNoteOnMessage(channel, note, velocity);
-                        //midiOutPort.SendMessage(midiMessageToSend);
+                        midiOutPort.SendMessage(midiMessageToSend);
                         Debug.WriteLine("TREFFER: " + x +" - " + index );
                     }
                 }
             }
-            //DoSomething((short)index);
+           // TheMainModel
+            BlankPage1.DoSomething((short)index);
         }
+        //
+
+
+
+
+        //
     }
     }
 

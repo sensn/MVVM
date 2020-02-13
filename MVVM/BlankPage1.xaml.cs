@@ -18,7 +18,7 @@ using System.Windows;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Windows.UI.Xaml.Shapes;
 using Windows.ApplicationModel.Background;
-using System;
+
 using System.Threading;
 using Windows.UI.Core;
 
@@ -37,7 +37,7 @@ namespace MVVM
 
              public sealed partial class BlankPage1 : Page
         {
-
+        Task t1;
             public string sers = "Hello   OIDA  ";
 
             public const int numchannels = 10;
@@ -56,13 +56,13 @@ namespace MVVM
             public Button[] bnkButton = new Button[2];
             public static Rectangle[] led = new Rectangle[16];
 
-             //Binding[] myChanSel_Binding = new Binding[10];
+            // Binding[] myChanSel_Binding = new Binding[10];
              Binding[] myLed_Binding = new Binding[16];
-           //  Binding[] myChanSel_Binding_Command = new Binding[10];
+            Binding[] myChanSel_Binding_Command = new Binding[10];
             public MainViewModel TheMainViewModel1 { get; set; }
-            
-            
-            TextBlock prgText;
+        public bool ddoit { get; private set; }
+      
+        TextBlock prgText;
             TextBlock bnkText;
 
 
@@ -81,49 +81,67 @@ namespace MVVM
             public static Worker playsequence;
             public static bool midiset = false;
 
-            public  MyLogic TheLogic = null;
+            public MyLogic TheLogic = null;
         public BlankPage1()
             {
                 InitializeComponent();
             this.TheMainViewModel1 = new MainViewModel();     //create instanze of MainViewModel
             this.TheMainViewModel1.fillItems();
             TheLogic = new MyLogic();
-          
+            TheLogic.setTheMainModel(TheMainViewModel1);
             // Add the following line of code.
             this.NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
 
-                //Debug.WriteLine("Servas Wöd, I brauch a göd! CREATE TASK");
+            Action<object> action = (object obj) =>
+            {
 
-                //playsequence = new Worker();
-                //Worker.LogHandler myLogger = new Worker.LogHandler(sendMidiMessage);
-                //// Worker.LogHandler myLogger = new Worker.LogHandler(BlankPage1.sendMidiMessage);
-                //playsequence.myLogger1 = myLogger;
-
-                //Action<object> action = (object obj) =>
-                //{
-
-                //    Console.WriteLine("Task={0}, obj={1}, Thread={2}",
-                //    Task.CurrentId, obj,
-                //    Thread.CurrentThread.ManagedThreadId);
-                //    playsequence.mythread1();
-                //};
+                Console.WriteLine("Task={0}, obj={1}, Thread={2}",
+                Task.CurrentId, obj,
+                Thread.CurrentThread.ManagedThreadId);
+               // playsequence.mythread1();
+                doLoadPattern();
+                //mythread1();
+            };
 
 
-                //Task t1 = new Task(action, "alpha");
-                //t1.Start();
-                //Console.WriteLine("t1 has been launched. (Main Thread={0})",
-                //                  Thread.CurrentThread.ManagedThreadId);
+            t1 = new Task(action, "alpha");
+         //   t1.Start();
+            Console.WriteLine("t1 has been launched. (Main Thread={0})",
+                              Thread.CurrentThread.ManagedThreadId);
+
+
+            //Debug.WriteLine("Servas Wöd, I brauch a göd! CREATE TASK");
+
+            //playsequence = new Worker();
+            //Worker.LogHandler myLogger = new Worker.LogHandler(sendMidiMessage);
+            //// Worker.LogHandler myLogger = new Worker.LogHandler(BlankPage1.sendMidiMessage);
+            //playsequence.myLogger1 = myLogger;
+
+            //Action<object> action = (object obj) =>
+            //{
+
+            //    Console.WriteLine("Task={0}, obj={1}, Thread={2}",
+            //    Task.CurrentId, obj,
+            //    Thread.CurrentThread.ManagedThreadId);
+            //    playsequence.mythread1();
+            //};
+
+
+            //Task t1 = new Task(action, "alpha");
+            //t1.Start();
+            //Console.WriteLine("t1 has been launched. (Main Thread={0})",
+            //                  Thread.CurrentThread.ManagedThreadId);
 
             ////SERVAS WÖD
 
-                //// Creating thread 
-                //// Using thread class 
-                //// Thread thr = new Thread(new ThreadStart(playsequence.mythread1));
-                //// thr.Start();
+            //// Creating thread 
+            //// Using thread class 
+            //// Thread thr = new Thread(new ThreadStart(playsequence.mythread1));
+            //// thr.Start();
 
-                // DefaultLaunch();    //Launch a app from asociated filetype
-                //****MIDI
-                inputDeviceWatcher =
+            // DefaultLaunch();    //Launch a app from asociated filetype
+            //****MIDI
+            inputDeviceWatcher =
                       new MyMidiDeviceWatcher(MidiInPort.GetDeviceSelector(), midiInPortListBox, Dispatcher);
 
                 inputDeviceWatcher.StartWatcher();
@@ -174,21 +192,25 @@ namespace MVVM
                     channelSel[i].Unchecked += HandleChannelSelUnChecked;
                     channelSel[i].Tag = i;
 
-                ////Binding myBinding1 = new Binding();
-                //myChanSel_Binding[i] = new Binding(); 
+                //Binding myBinding1 = new Binding();
+                //myChanSel_Binding[i] = new Binding();
                 //myChanSel_Binding[i].Source = TheMainViewModel1;
-                //string ppath = "MyItemsbool["+i+"]";
-                //myChanSel_Binding[i].Path = new PropertyPath(ppath);             
+                //string ppath = "MyItemsbool[" + i + "]";
+                //myChanSel_Binding[i].Path = new PropertyPath(ppath);
                 //myChanSel_Binding[i].Mode = BindingMode.TwoWay;
                 //myChanSel_Binding[i].UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
                 //BindingOperations.SetBinding(channelSel[i], ToggleButton.IsCheckedProperty, myChanSel_Binding[i]);
-                ////COMMAND BINDING
+                //COMMAND BINDING
                 //myChanSel_Binding_Command[i] = new Binding();
                 //myChanSel_Binding_Command[i].Source = TheMainViewModel1;
                 ////    myChanSel_Binding_Command[i].Path = new PropertyPath(ppath);
-                //myChanSel_Binding_Command[i].Path = new PropertyPath("OKButtonClicked");
+                //myChanSel_Binding_Command[i].Path = new PropertyPath("OKButtonClicked1");
+              
                 //BindingOperations.SetBinding(channelSel[i], ToggleButton.CommandProperty, myChanSel_Binding_Command[i]);
-
+                channelSel[i].SetBinding(ToggleButton.CommandProperty, new Binding() { Source = TheMainViewModel1, Path = new PropertyPath("OKButtonClicked1") });
+                channelSel[i].SetBinding(ToggleButton.CommandParameterProperty, new Binding() { Source = TheMainViewModel1, Path = new PropertyPath("MyChannel["+i+"]") });
+                
+                
                 ButtonsUniformGrid_Copy.Children.Add(channelSel[i]);
                 }
                 //channelSel[0].IsChecked = true;
@@ -199,15 +221,17 @@ namespace MVVM
                     led[i].Fill = new SolidColorBrush(Windows.UI.Colors.Black);  //SAPCER
                     LedUniformGrid.Children.Add(led[i]);
 
-               // //myLed_Binding  TODO GOON
-
-               //myLed_Binding[i] = new Binding();
+                // //myLed_Binding  TODO GOON
+              //  SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+             //   mySolidColorBrush.Color= Windows.UI.Colors.DarkRed;
+             
+               // myLed_Binding[i] = new Binding();
                //myLed_Binding[i].Source = TheMainViewModel1;
-               // string ppath = "MyItemsbool[" + i + "]";
+               // string ppath = "MyItems_Leds_bool[" + i + "]";
                //myLed_Binding[i].Path = new PropertyPath(ppath);
                //myLed_Binding[i].Mode = BindingMode.TwoWay;
                //myLed_Binding[i].UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-               // BindingOperations.SetBinding(channelSel[i], ToggleButton.IsCheckedProperty,myLed_Binding[i]);
+               // BindingOperations.SetBinding(myLed_Binding[i], Rectangle.FillProperty, myLed_Binding[i]);
             }
             led[3].Fill = new SolidColorBrush(Windows.UI.Colors.DarkRed);  //SAPCER
 
@@ -414,6 +438,7 @@ namespace MVVM
                     midiOutPortListBox.SelectedIndex = 0;
                     //midiOut1();
                     midiset = true;
+                TheLogic.setMidiout(midiOutPort);
                 }
                 
             TheLogic.playsequence.isplaying = !TheLogic.playsequence.isplaying;
@@ -421,11 +446,52 @@ namespace MVVM
                 // Debug.WriteLine("PLAY");
                 // Debug.WriteLine("MIDI ITEMS: " + midiOutPortListBox.Items.Count);
             }
-
-            private void HandleloadSlotChecked(object sender, RoutedEventArgs e)
+            private void HandlesavePatternChecked(object sender, RoutedEventArgs e)
             {
-                //  throw new NotImplementedException();
-                ToggleButton toggle = sender as ToggleButton;
+           
+            // ToggleButton toggle = sender as ToggleButton;
+            // int m = (int)toggle.Tag;
+            for (int x = 0; x < 10; x++)
+                   {
+                       TheLogic.TheModels[x].pattern_save_struct(tabentry);
+                       //room[x].pattern_save_struct(tabentry);
+                       room[x].thepattern.int_vs[tabentry] = (int)room[x].slider[1].Value;
+                       room[x].thepattern.int_sl2[tabentry] = (int)room[x].slider[2].Value;
+                       room[x].thepattern.int_prg[tabentry] = room[x].prg;
+                       room[x].thepattern.int_bnk[tabentry] = room[x].bank;
+
+                   }
+            }
+        public void doLoadPattern()
+        {
+            while (!ddoit) { }
+            for (int x = 0; x < numchannels; x++)
+            {
+                TheLogic.TheModels[x].pattern_load_struct(tabentry);
+                // room[x].pattern_load_struct(tabentry);
+                //room[x].slider[1].SetValue(room[x].thepattern.int_vs[tabentry]));
+                //room[x].slider[1].Value = room[x].thepattern.int_vs[tabentry];
+                //room[x].slider[2].Value = room[x].thepattern.int_sl2[tabentry];
+
+                //room[x].prg = room[x].thepattern.int_prg[tabentry];
+
+                //room[x].bank = room[x].thepattern.int_bnk[tabentry];
+
+                ////  bankchangeme(x, room[x].bank);
+                ////  prgchangeme(x, room[x].prg);
+                ////  vol_value(x, room[x].thepattern.int_vs[tabentry]);
+                //bnkText.Text = room[activechannel].bank.ToString();
+                //prgText.Text = room[activechannel].prg.ToString();
+               
+            }
+            ddoit = false;
+        }
+        private async void HandleloadSlotChecked(object sender, RoutedEventArgs e)
+            {
+           // ddoit = true;
+            
+            //  throw new NotImplementedException();
+            ToggleButton toggle = sender as ToggleButton;
                 int m = (int)toggle.Tag;
                 tabentry = m;
                 for (int i = 0; i < numchannels; i++)
@@ -435,26 +501,29 @@ namespace MVVM
                         loadSlot[i].IsChecked = false;
                     }
                 }
-                //
+            //
                 for (int x = 0; x < numchannels; x++)
                 {
-                    room[x].pattern_load_struct(tabentry);
-                    //room[x].slider[1].SetValue(room[x].thepattern.int_vs[tabentry]));
-                    room[x].slider[1].Value = room[x].thepattern.int_vs[tabentry];
-                    room[x].slider[2].Value = room[x].thepattern.int_sl2[tabentry];
+                TheLogic.TheModels[x].pattern_load_struct(tabentry);
+                // room[x].pattern_load_struct(tabentry);
+                //room[x].slider[1].SetValue(room[x].thepattern.int_vs[tabentry]));
+                room[x].slider[1].Value = room[x].thepattern.int_vs[tabentry];
+                room[x].slider[2].Value = room[x].thepattern.int_sl2[tabentry];
 
-                    room[x].prg = room[x].thepattern.int_prg[tabentry];
+                room[x].prg = room[x].thepattern.int_prg[tabentry];
 
-                    room[x].bank = room[x].thepattern.int_bnk[tabentry];
+                room[x].bank = room[x].thepattern.int_bnk[tabentry];
 
-                    bankchangeme(x, room[x].bank);
-                    prgchangeme(x, room[x].prg);
-                    vol_value(x, room[x].thepattern.int_vs[tabentry]);
-                    bnkText.Text = room[activechannel].bank.ToString();
-                    prgText.Text = room[activechannel].prg.ToString();
-                }
+                //  bankchangeme(x, room[x].bank);
+                //  prgchangeme(x, room[x].prg);
+                //  vol_value(x, room[x].thepattern.int_vs[tabentry]);
+                bnkText.Text = room[activechannel].bank.ToString();
+                prgText.Text = room[activechannel].prg.ToString();
             }
-            public static void bpm_value(int thevalue)
+
+
+        }
+        public static void bpm_value(int thevalue)
             {
                 //playsequence.thebpm = thevalue;
                 //playsequence.ms = ((60000.0 / (double)thevalue) / (double)4);
@@ -490,6 +559,7 @@ namespace MVVM
                 Debug.WriteLine(room[0].thepattern.vec_bs1[0, 0]);
             }
             public void sendMidiMessage(int i, int j, int index)
+            //public async Task sendMidiMessage(int i, int j, int index)
             {
 
                 for (int x = 0; x < 15; x++)
@@ -516,24 +586,33 @@ namespace MVVM
                 }
                 DoSomething((short)index);
             }
-            private void HandlesavePatternChecked(object sender, RoutedEventArgs e)
-            {
-                // ToggleButton toggle = sender as ToggleButton;
-                // int m = (int)toggle.Tag;
-                for (int x = 0; x < 10; x++)
-                {
-                    room[x].pattern_save_struct(tabentry);
-                    room[x].thepattern.int_vs[tabentry] = (int)room[x].slider[1].Value;
-                    room[x].thepattern.int_sl2[tabentry] = (int)room[x].slider[2].Value;
-                    room[x].thepattern.int_prg[tabentry] = room[x].prg;
-                    room[x].thepattern.int_bnk[tabentry] = room[x].bank;
-
-                }
-            }
+          
             private void HandleChannelSelUnChecked(object sender, RoutedEventArgs e)
             {
                 // throw new NotImplementedException();
             }
+        public void SelChannel(int m) {
+            for (int i = 0; i < numchannels; i++)
+            {
+                if (i != m)
+                {
+                    room[i].uniformGrid1.Visibility = Visibility.Collapsed;
+                    room[i].uniformGrid2.Visibility = Visibility.Collapsed;
+                    room[i].uniformGrid3.Visibility = Visibility.Collapsed;
+                    channelSel[i].IsChecked = false;
+                }
+            }
+
+            activechannel = m;
+            Debug.WriteLine("ACTIVECHANNEL:" + activechannel);
+            //  TheMainViewModel1.printItems();
+            //channelSel[m].IsChecked = true;
+            room[m].uniformGrid1.Visibility = Visibility.Visible;
+            room[m].uniformGrid2.Visibility = Visibility.Visible;
+            room[m].uniformGrid3.Visibility = Visibility.Visible;
+            bnkText.Text = room[activechannel].bank.ToString();
+            prgText.Text = room[activechannel].prg.ToString();
+        } 
             private void HandleChannelSelChecked(object sender, RoutedEventArgs e)
             {
             //TheMainViewModel1.printItems();
@@ -586,7 +665,7 @@ namespace MVVM
             }
 
             //public async void DoSomething(short step)
-            public void DoSomething(short step)
+            public static  void DoSomething(short step)
             // public static void DoSomething(short step)
             {
                 // await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>

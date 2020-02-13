@@ -124,6 +124,7 @@
     </Compile>
     <Compile Include="Calculator.cs" />
     <Compile Include="DelegateCommand.cs" />
+    <Compile Include="DelegateCommand1.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="MainViewModelBase.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -173,6 +174,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="EPPlus">
+      <Version>4.5.3.3</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.9</Version>
     </PackageReference>
