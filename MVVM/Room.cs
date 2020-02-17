@@ -45,7 +45,8 @@ namespace MVVM
             public int[,] vec_bs1;
             public int[] vec_m_bs1;
             //public List<int> vec_bs1;
-            public List<int> vec_bs;
+            public int[] vec_bs;
+            //public List<int> vec_bs;
             public List<int> vec_m_bs;
             public List<int> int_vs;
             public List<int> int_bnk;
@@ -67,8 +68,9 @@ namespace MVVM
             // thepattern.vec_bs = new List<int>(5*16*10);
             thepattern.vec_bs1 = new int[5, 16];
             thepattern.vec_m_bs1 = new int[5];
+            thepattern.vec_bs = new int[80*10];
             //thepattern.vec_bs1 = new List<int>(5 * 16 * 10);
-            thepattern.vec_bs = new List<int>(5 * 16 * 10);
+          //  thepattern.vec_bs = new List<int>(5 * 16 * 10);
             thepattern.vec_m_bs = new List<int>(5 * 10);
             thepattern.int_bnk = new List<int>(10);
             thepattern.int_prg = new List<int>(10);
@@ -92,7 +94,9 @@ namespace MVVM
             for (int i = 0; i < (5 * 16 * 10); i++)
             {
                 // Debug.WriteLine("LOOP" + i);
-                thepattern.vec_bs.Add(0);
+               
+                //thepattern.vec_bs.Add(0);
+                
                 //  thepattern.vec_bs.Add(0);
             }
 
@@ -150,7 +154,9 @@ namespace MVVM
                         string ppath = "MyItemsbool[" + ((j) + (i * 16)) + "]";
                         Toggle_Binding[(j) + (i * 16)].Path = new PropertyPath(ppath);
                         Toggle_Binding[(j) + (i * 16)].Mode = BindingMode.TwoWay;
-                        Toggle_Binding[(j) + (i * 16)].UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                       // Toggle_Binding[(j) + (i * 16)].UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+                        Toggle_Binding[(j) + (i * 16)].UpdateSourceTrigger = UpdateSourceTrigger.Explicit;
+                   // Toggle_Binding[(j) + (i * 16)].UpdateSourceTrigger();
                         BindingOperations.SetBinding(bu[i, j], ToggleButton.IsCheckedProperty, Toggle_Binding[(j) + (i * 16)]);
                     
                     }

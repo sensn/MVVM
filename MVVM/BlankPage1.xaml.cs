@@ -349,7 +349,7 @@ namespace MVVM
                     loadSlot[i] = new ToggleButton();
                     loadSlot[i].HorizontalAlignment = HorizontalAlignment.Stretch;
                     loadSlot[i].VerticalAlignment = VerticalAlignment.Stretch;
-                    loadSlot[i].Checked += HandleloadSlotChecked;
+                    //loadSlot[i].Checked += HandleloadSlotChecked;
                     //   loadSlot[i].Unchecked += HandleChannelSelUnChecked;
                     loadSlot[i].Tag = i;
                     ButtonsUniformGrid_Copy1.Children.Add(loadSlot[i]);
@@ -453,7 +453,7 @@ namespace MVVM
             // int m = (int)toggle.Tag;
             for (int x = 0; x < 10; x++)
                    {
-                       TheLogic.TheModels[x].pattern_save_struct(tabentry);
+                       MyLogic.TheModels[x].pattern_save_struct(tabentry);
                        //room[x].pattern_save_struct(tabentry);
                        room[x].thepattern.int_vs[tabentry] = (int)room[x].slider[1].Value;
                        room[x].thepattern.int_sl2[tabentry] = (int)room[x].slider[2].Value;
@@ -467,7 +467,7 @@ namespace MVVM
             while (!ddoit) { }
             for (int x = 0; x < numchannels; x++)
             {
-                TheLogic.TheModels[x].pattern_load_struct(tabentry);
+                MyLogic.TheModels[x].pattern_load_struct(tabentry);
                 // room[x].pattern_load_struct(tabentry);
                 //room[x].slider[1].SetValue(room[x].thepattern.int_vs[tabentry]));
                 //room[x].slider[1].Value = room[x].thepattern.int_vs[tabentry];
@@ -504,7 +504,7 @@ namespace MVVM
             //
                 for (int x = 0; x < numchannels; x++)
                 {
-                TheLogic.TheModels[x].pattern_load_struct(tabentry);
+                MyLogic.TheModels[x].pattern_load_struct(tabentry);
                 // room[x].pattern_load_struct(tabentry);
                 //room[x].slider[1].SetValue(room[x].thepattern.int_vs[tabentry]));
                 room[x].slider[1].Value = room[x].thepattern.int_vs[tabentry];
@@ -613,7 +613,8 @@ namespace MVVM
             bnkText.Text = room[activechannel].bank.ToString();
             prgText.Text = room[activechannel].prg.ToString();
         } 
-            private void HandleChannelSelChecked(object sender, RoutedEventArgs e)
+       
+        private void HandleChannelSelChecked(object sender, RoutedEventArgs e)
             {
             //TheMainViewModel1.printItems();
 

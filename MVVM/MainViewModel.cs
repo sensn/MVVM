@@ -1,6 +1,8 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -9,17 +11,18 @@ using System.Windows.Input;
 
 namespace MVVM
 {
-    public class MainViewModel : MainViewModelBase
+    public class MainViewModel : MainViewModelBase 
     {
         public struct pattern
         {
 
             // public List<int> int_tempo;
 
-            public int[,] vec_bs1;
+            public int[] vec_bs1;
             public int[] vec_m_bs1;
             //public List<int> vec_bs1;
-            public List<int> vec_bs;
+            public int[] vec_bs;
+           // public List<int> vec_bs;
             public List<int> vec_m_bs;
             public List<int> int_vs;
             public List<int> int_bnk;
@@ -43,14 +46,18 @@ namespace MVVM
         private ObservableCollection<int> _myChannel = new ObservableCollection<int>(new[] { 0,1,2,3,4,5,6,7,8,9 });
         private ObservableCollection<bool> _myItemsbool = new ObservableCollection<bool>(new[] { true, false, true });
         private ObservableCollection<bool> _myItems_Mute_bool = new ObservableCollection<bool>(new[] { true, false, true });
-        
-       public MainViewModel()
+        private ObservableCollection<int> _mySlider = new ObservableCollection<int>(new[] { 127, 127, 127, 127, 127, 127, 127, 127, 127, 127 });
+
+     
+
+        public MainViewModel()
         {
             calculator_ = new Calculator(Value1, Value2);
-            thepattern.vec_bs1 = new int[5, 16];
+            thepattern.vec_bs1 = new int[5* 16];
             thepattern.vec_m_bs1 = new int[5];
             //thepattern.vec_bs1 = new List<int>(5 * 16 * 10);
-            thepattern.vec_bs = new List<int>(5 * 16 * 10);
+            thepattern.vec_bs = new int[80* 10];
+            //thepattern.vec_bs = new List<int>(5 * 16 * 10);
             thepattern.vec_m_bs = new List<int>(5 * 10);
             thepattern.int_bnk = new List<int>(10);
             thepattern.int_prg = new List<int>(10);
@@ -74,7 +81,7 @@ namespace MVVM
             for (int i = 0; i < (5 * 16 * 10); i++)
             {
                 // Debug.WriteLine("LOOP" + i);
-                thepattern.vec_bs.Add(0);
+              //  thepattern.vec_bs.Add(0);
                 //  thepattern.vec_bs.Add(0);
             }
 
@@ -237,19 +244,15 @@ namespace MVVM
             get
             {
 
-                //return new DelegateCommand1(printItems1(int));
+               // return new DelegateCommand1(printItems1(int));
                
-                return new DelegateCommand1<object>(UpdateDatabase);
+                return new DelegateCommand1<object>(MyLogic.LoadPattern);
             }
         }
 
         public ObservableCollection<int> MyChannel { get => _myChannel; set => _myChannel = value; }
 
-        public void UpdateDatabase(object parameter)
-        {
-            BlankPage1.SelChannel((int)parameter);
-            Debug.Write(parameter);
-        }
+       
 
 
         public void FindResult()
@@ -294,28 +297,34 @@ namespace MVVM
         }
 
        // public void pattern_load_struct(int tabentry)
-        public async void  pattern_load_struct(int tabentry)
+        public async Task  pattern_load_struct(int tabentry)
         {
-          
-                   
-                    Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                    {
-                    for (int i = 0; i < 5; i++)
-                    {
-                        for (int j = 0; j < 16; j++)
-                        {
-                                thepattern.vec_bs1[i, j] = thepattern.vec_bs[(j) + (i * 16) + ((80) * tabentry)];
-                                MyItemsbool[(j) + (i * 16)] = thepattern.vec_bs1[i, j] != 0;
-                            }
-                        }
-                        for (int i = 0; i < 5; i++)
-                        {
-                            thepattern.vec_m_bs1[i] = thepattern.vec_m_bs[(i) + ((5) * tabentry)];
-                            MyItems_Mute_bool[i] = thepattern.vec_m_bs1[i] != 0;
+
+
+            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+             {
+                 Array.Copy(thepattern.vec_bs, 80 * tabentry, thepattern.vec_bs1, 0, 80);
+                 // Array.Copy(thepattern.vec_bs1, 0, MyItemsbool, 0, 80);
+                 for (int i = 0; i < 80; i++) { 
+                     MyItemsbool[i] = thepattern.vec_bs1[i] != 0;
+             }
+                 
+                 //for (int i = 0; i < 5; i++)
+                 //{
+                 //    for (int j = 0; j < 16; j++)
+                 //    {
+                 //        //thepattern.vec_bs1[i, j] = thepattern.vec_bs[(j) + (i * 16) + ((80) * tabentry)];
+                 //        MyItemsbool[(j) + (i * 16)] = thepattern.vec_bs1[(j) + (i * 16)] != 0;
+                 //    }
+                 //}
+                 for (int i = 0; i < 5; i++)
+                 {
+                     thepattern.vec_m_bs1[i] = thepattern.vec_m_bs[(i) + ((5) * tabentry)];
+                     MyItems_Mute_bool[i] = thepattern.vec_m_bs1[i] != 0;
                             //mute_bu[i].IsChecked = thepattern.vec_m_bs1[i] != 0;
                         }
 
-                    });
+             });
                     // bu[i, j].IsChecked = thepattern.vec_bs1[i, j] != 0;  // INT TO        
                     //bu[i,j].IsChecked = thepattern.vec_bs[(j) + (i * 16) + ((80) * tabentry)] != 0 ;  // INT TO  
          
